@@ -13,6 +13,7 @@ public class Student implements Serializable {
     private int studentId;
     private String studentName;
     private String studentPhone;
+    private String classType;
 
 //    @OneToOne
 //    @JoinColumn(name = "fk_teacher_id")
@@ -36,26 +37,33 @@ public class Student implements Serializable {
             joinColumns = @JoinColumn(name = "student_student_id", referencedColumnName = "studentId"),
             inverseJoinColumns = @JoinColumn(name = "teacher_teacher_id",
                     referencedColumnName = "teacherId"))
+//    @Autowired
     private List<Teacher> teachers;
+    // field based DI
 
     public Student() {
     }
 
-    public Student(String student_name, String student_phone) {
+    public Student(String student_name, String student_phone, String class_type) {
         this.studentName = student_name;
         this.studentPhone = student_phone;
+        this.classType = class_type;
     }
 
-    public Student(int studentId, String student_name, String student_phone) {
+    // contructor based DI
+    public Student(int studentId, String student_name, String student_phone, String class_type, List<Teacher> teacherList) {
         this.studentId = studentId;
         this.studentName = student_name;
         this.studentPhone = student_phone;
+        this.classType = class_type;
+        this.teachers = teacherList;
     }
 
     public List<Teacher> getTeachers() {
         return teachers;
     }
 
+    // setter based DI
     public void setTeachers(List<Teacher> teachers) {
         this.teachers = teachers;
     }
@@ -84,10 +92,18 @@ public class Student implements Serializable {
         this.studentPhone = studentPhone;
     }
 
+    public String getClassType() {
+        return this.classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
+    }
+
     @Override
     public String toString() {
         return "Student ID = " + this.studentId + " Student Name = " + this.studentName +
-                " Student phone = " + this.studentPhone;
+                " Student phone = " + this.studentPhone + " Student class type = " + this.classType;
 //                + " " + this.teacher.toString();
     }
 

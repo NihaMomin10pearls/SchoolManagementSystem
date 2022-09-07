@@ -2,6 +2,7 @@ package com.example.demo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,7 +35,9 @@ Teacher implements Serializable {
 
     @ManyToMany(mappedBy = "teachers")
     @JsonIgnore
+    @Autowired
     private List<Student> students;
+    // field based DI
 
     public Teacher() {
     }
@@ -44,16 +47,19 @@ Teacher implements Serializable {
         this.teacherPhone = teacher_phone;
     }
 
-    public Teacher(int teacher_id, String teacher_name, String teacher_phone) {
+    // Constructor based DI
+    public Teacher(int teacher_id, String teacher_name, String teacher_phone, List<Student> studentList) {
         this.teacherId = teacher_id;
         this.teacherName = teacher_name;
         this.teacherPhone = teacher_phone;
+        this.students = studentList;
     }
 
     public List<Student> getStudents() {
         return students;
     }
 
+    // setter based DI
     public void setStudents(List<Student> students) {
         this.students = students;
     }
