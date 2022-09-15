@@ -1,18 +1,21 @@
 package com.example.demo.contoller;
 
+import com.example.demo.TeacherFactory;
 import com.example.demo.domain.Teacher;
 import com.example.demo.respository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class TeacherController {
 
     @Autowired
     TeacherRepository teacherRepository;
+
+    @Autowired
+    TeacherFactory teacherFactory;
 
     // all teachers
     @GetMapping("/teacher")
@@ -27,21 +30,30 @@ public class TeacherController {
         return teacherRepository.findById(id).get();
     }
 
+    // all teacher of class type ?
+    @GetMapping("/teacher/classtype/{classType}")
+    public List<Teacher> show_teacher_of_class(@PathVariable String classType) {
+        return teacherFactory.getTeacherService(classType).findClassType(classType);
+    }
+
     // add teacher
     @PostMapping("/teacher/create")
-    public Teacher create(@RequestBody Map<String, String> body) {
-        String name = body.get("teacherName");
-        String phone = body.get("teacherPhone");
-        return teacherRepository.save(new Teacher(name, phone));
+    public Teacher create(@RequestBody Teacher t) {
+//        String name = body.get("teacherName");
+//        String phone = body.get("teacherPhone");
+//        return teacherRepository.save(new Teacher(name, phone));
+        return teacherRepository.save(t);
     }
 
     // update teacher
     @PutMapping("/teacher/update/{id}")
-    public Teacher update(@PathVariable int id, @RequestBody Map<String, String> body) {
-        Teacher s = teacherRepository.findById(id).get();
-        s.setTeacherName(body.get("teacherName"));
-        s.setTeacherPhone(body.get("teacherPhone"));
-        return teacherRepository.save(s);
+    public Teacher update(@PathVariable int id, @RequestBody Teacher t) {
+//        Teacher t_updated = new Teacher(id, t.getTeacherName(), t.getTeacherPhone(), t.getClassType());
+        Teacher t_updated = teacherRepository.findById(id).get();
+        t_updated.setTeacherName(t.getTeacherName());
+        t_updated.setTeacherPhone(t.getTeacherPhone());
+        t_updated.setClassType(t.getClassType());
+        return teacherRepository.save(t_updated);
     }
 
     // delete teacher

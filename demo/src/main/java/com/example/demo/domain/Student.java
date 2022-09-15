@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -32,7 +33,7 @@ public class Student implements Serializable {
 //        this.teacher = teacher;
 //    }
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "teacher_has_student",
             joinColumns = @JoinColumn(name = "student_student_id", referencedColumnName = "studentId"),
             inverseJoinColumns = @JoinColumn(name = "teacher_teacher_id",
@@ -40,6 +41,11 @@ public class Student implements Serializable {
 //    @Autowired
     private List<Teacher> teachers;
     // field based DI
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adress_postal_code", nullable = true)
+    @JsonIgnore
+    private Adress adress;
 
     public Student() {
     }
@@ -51,16 +57,17 @@ public class Student implements Serializable {
     }
 
     // contructor based DI
-    public Student(int studentId, String student_name, String student_phone, String class_type, List<Teacher> teacherList) {
+    public Student(int studentId, String student_name, String student_phone, String class_type, Adress adress, List<Teacher> teacherList) {
         this.studentId = studentId;
         this.studentName = student_name;
         this.studentPhone = student_phone;
         this.classType = class_type;
         this.teachers = teacherList;
+        this.adress = adress;
     }
 
     public List<Teacher> getTeachers() {
-        return teachers;
+        return this.teachers;
     }
 
     // setter based DI
@@ -98,6 +105,14 @@ public class Student implements Serializable {
 
     public void setClassType(String classType) {
         this.classType = classType;
+    }
+
+    public Adress getAdress() {
+        return this.adress;
+    }
+
+    public void setAdress(Adress adress) {
+        this.adress = adress;
     }
 
     @Override

@@ -16,7 +16,7 @@ Teacher implements Serializable {
     private int teacherId;
     private String teacherName;
     private String teacherPhone;
-
+    private String classType;
 
 //    @OneToOne(mappedBy = "teacher")
 //    private Student student;
@@ -42,16 +42,25 @@ Teacher implements Serializable {
     public Teacher() {
     }
 
-    public Teacher(String teacher_name, String teacher_phone) {
-        this.teacherName = teacher_name;
-        this.teacherPhone = teacher_phone;
-    }
-
-    // Constructor based DI
-    public Teacher(int teacher_id, String teacher_name, String teacher_phone, List<Student> studentList) {
+    public Teacher(int teacher_id, String teacher_name, String teacher_phone, String classType) {
         this.teacherId = teacher_id;
         this.teacherName = teacher_name;
         this.teacherPhone = teacher_phone;
+        this.classType = classType;
+    }
+
+    public Teacher(String teacher_name, String teacher_phone, String classType) {
+        this.teacherName = teacher_name;
+        this.teacherPhone = teacher_phone;
+        this.classType = classType;
+    }
+
+    // Constructor based DI
+    public Teacher(int teacher_id, String teacher_name, String teacher_phone, String classType, List<Student> studentList) {
+        this.teacherId = teacher_id;
+        this.teacherName = teacher_name;
+        this.teacherPhone = teacher_phone;
+        this.classType = classType;
         this.students = studentList;
     }
 
@@ -88,9 +97,17 @@ Teacher implements Serializable {
         this.teacherPhone = teacherPhone;
     }
 
+    public String getClassType() {
+        return this.classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
+    }
+
     @Override
     public String toString() {
         return "Teacher ID = " + this.teacherId + " Teacher Name = " + this.teacherName +
-                " Teacher phone = " + this.teacherPhone;
+                " Teacher phone = " + this.teacherPhone + " Tecaher class type = " + this.classType;
     }
 }
